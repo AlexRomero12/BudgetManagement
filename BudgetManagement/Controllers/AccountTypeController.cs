@@ -59,5 +59,23 @@ namespace BudgetManagement.Controllers
 
             return this.View();
         }
+
+        /// <summary>
+        /// Validate accounts types exist.
+        /// </summary>
+        /// <param name="name">Account type name.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpGet]
+        public async Task<IActionResult> ValidateAccountsTypesExist(string name)
+        {
+            var usuarioID = 2;
+            var accountTypeExist = await this.repositoryAccountsTypes.Exists(name, usuarioID);
+            if (accountTypeExist)
+            {
+                return this.Json($@"The name {name} already exists.");
+            }
+
+            return this.Json(true);
+        }
     }
 }

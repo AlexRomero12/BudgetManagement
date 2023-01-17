@@ -4,6 +4,7 @@
 
 namespace BudgetManagement.Models
 {
+    using Microsoft.AspNetCore.Mvc;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
@@ -21,6 +22,7 @@ namespace BudgetManagement.Models
         /// </summary>
         [Required]
         [StringLength(maximumLength: 50, MinimumLength = 3, ErrorMessage = "The {0} field length must be between {2} and {1} characters.")]
+        [Remote(action: "ValidateAccountsTypesExist", controller: "AccountType")]
         public string Name { get; set; }
 
         /// <summary>
