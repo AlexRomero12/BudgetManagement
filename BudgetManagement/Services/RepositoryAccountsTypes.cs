@@ -6,7 +6,6 @@ namespace BudgetManagement.Services
 {
     using BudgetManagement.Models;
     using Dapper;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Data.SqlClient;
 
     /// <summary>
@@ -55,6 +54,20 @@ namespace BudgetManagement.Services
                                                                         WHERE Name = @Name AND UserID = @UserID;",
                                                                         new { name, userID });
             return exists == 1;
+        }
+
+        /// <summary>
+        /// Get account type by UserID.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <returns>IEnumerable AccountType.</returns>
+        public async Task<IEnumerable<AccountType>> GetByUserID(int userID)
+        {
+            using var connection = new SqlConnection(this.connectionString);
+            return await connection.QueryAsync<AccountType>(
+                @"SELECT ID,NAME,[ORDER]
+                 FROM ACCOUNTTYPE
+                 WHERE USERID = @USERID", new { userID });
         }
     }
 }

@@ -4,6 +4,7 @@
 
 namespace BudgetManagement.Services
 {
+    using System.Collections.Generic;
     using BudgetManagement.Models;
 
     /// <summary>
@@ -25,5 +26,12 @@ namespace BudgetManagement.Services
         /// <param name="userID">User identifier.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         Task<bool> Exists(string name, int userID);
+
+        /// <summary>
+        /// Get account type by UserID.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <returns>IEnumerable AccountType.</returns>
+        Task<IEnumerable<AccountType>> GetByUserID(int userID);
     }
 }

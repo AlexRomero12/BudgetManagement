@@ -25,6 +25,17 @@ namespace BudgetManagement.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index()
+        {
+            var userID = 2;
+            var accountType = await this.repositoryAccountsTypes.GetByUserID(userID);
+            return this.View(accountType);
+        }
+
+        /// <summary>
         /// Renders the create view.
         /// </summary>
         /// <returns>The create view.</returns>
@@ -57,7 +68,7 @@ namespace BudgetManagement.Controllers
 
             await this.repositoryAccountsTypes.Create(accountType);
 
-            return this.View();
+            return this.RedirectToAction("Index");
         }
 
         /// <summary>
