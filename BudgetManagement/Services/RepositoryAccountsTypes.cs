@@ -24,11 +24,7 @@ namespace BudgetManagement.Services
             this.connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        /// <summary>
-        /// Create AccountType in DB.
-        /// </summary>
-        /// <param name="accountType">AccountType model.</param>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        /// <inheritdoc cref="IRepositoryAccountsTypes.Create(AccountType)"/>
         public async Task Create(AccountType accountType)
         {
             using var connection = new SqlConnection(this.connectionString);
@@ -39,12 +35,7 @@ namespace BudgetManagement.Services
             accountType.ID = id;
         }
 
-        /// <summary>
-        /// Validates if an AccountType exists.
-        /// </summary>
-        /// <param name="name">AccountType name.</param>
-        /// <param name="userID">User identifier.</param>
-        /// <returns><bool>A <see cref="Task"/> representing the asynchronous operation.</placeholder></returns>
+        /// <inheritdoc cref="IRepositoryAccountsTypes.Exists(string, int)"/>
         public async Task<bool> Exists(string name, int userID)
         {
             using var connection = new SqlConnection(this.connectionString);
@@ -56,18 +47,33 @@ namespace BudgetManagement.Services
             return exists == 1;
         }
 
-        /// <summary>
-        /// Get account type by UserID.
-        /// </summary>
-        /// <param name="userID">User identifier.</param>
-        /// <returns>IEnumerable AccountType.</returns>
+        /// <inheritdoc cref="IRepositoryAccountsTypes.GetByUserID(int)"/>
         public async Task<IEnumerable<AccountType>> GetByUserID(int userID)
         {
             using var connection = new SqlConnection(this.connectionString);
             return await connection.QueryAsync<AccountType>(
-                @"SELECT ID,NAME,[ORDER]
+                @"SELECT ID,Name,[Order]
                  FROM ACCOUNTTYPE
                  WHERE USERID = @USERID", new { userID });
+        }
+
+        /// <inheritdoc cref="IRepositoryAccountsTypes.Update(AccountType)"/>
+        public async Task Update(AccountType accountType)
+        {
+            using var connection = new SqlConnection(this.connectionString);
+            await connection.ExecuteAsync(
+                @"UPDATE ACCOUNTTYPE
+                SET Name = @Name 
+                WHERE ID = @Id", accountType);
+        }
+
+        /// <inheritdoc cref="IRepositoryAccountsTypes.GetByID(int, int)"/>
+        public async Task<AccountType> GetByID(int id, int UserId)
+        {
+            using var connection = new SqlConnection(this.connectionString);
+            return await connection.QueryFirstAsync(
+                                    @"SELECT ID,Name,[Order]
+                                    WHERE ID = @ID AND UserID = @UserID", new { id, UserId });
         }
     }
 }
