@@ -38,7 +38,7 @@ namespace BudgetManagement.Controllers
         }
 
         /// <summary>
-        /// Renders the create view.
+        /// Renders the create AccountType view.
         /// </summary>
         /// <returns>The create view.</returns>
         public IActionResult Create()
@@ -70,6 +70,43 @@ namespace BudgetManagement.Controllers
 
             await this.repositoryAccountsTypes.Create(accountType);
 
+            return this.RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Renders the update AccountType view.
+        /// </summary>
+        /// <param name="id">AccountType ID.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var userID = this.serviceUser.GetUserID();
+            var accountType = await this.repositoryAccountsTypes.GetByID(id, userID);
+            if (accountType == null)
+            {
+                return this.RedirectToAction("NotFound", "Home");
+            }
+
+            return this.View(accountType);
+        }
+
+        /// <summary>
+        /// Update AccountType in DB.
+        /// </summary>
+        /// <param name="accountType">AccountType.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public async Task<IActionResult> Update(AccountType accountType)
+        {
+            var userID = this.serviceUser.GetUserID();
+            var accountTypeExist = this.repositoryAccountsTypes.GetByID(accountType.ID, userID);
+            if (accountTypeExist == null)
+            {
+                return this.RedirectToAction("NotFound", "Home");
+            }
+
+            await this.repositoryAccountsTypes.Update(accountType);
             return this.RedirectToAction("Index");
         }
 

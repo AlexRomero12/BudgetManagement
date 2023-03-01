@@ -71,9 +71,10 @@ namespace BudgetManagement.Services
         public async Task<AccountType> GetByID(int id, int UserId)
         {
             using var connection = new SqlConnection(this.connectionString);
-            return await connection.QueryFirstAsync(
+            return await connection.QueryFirstOrDefaultAsync<AccountType>(
                                     @"SELECT ID,Name,[Order]
-                                    WHERE ID = @ID AND UserID = @UserID", new { id, UserId });
+                                    FROM AccountType
+                                    WHERE ID = @id AND UserID = @UserId", new { id, UserId });
         }
     }
 }
