@@ -14,23 +14,25 @@ namespace BudgetManagement.Controllers
     public class AccountTypeController : Controller
     {
         private readonly IRepositoryAccountsTypes repositoryAccountsTypes;
+        private readonly IServiceUser serviceUser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountTypeController"/> class.
         /// </summary>
         /// <param name="repositoryAccountsTypes">Irepository accounts types.</param>
-        public AccountTypeController(IRepositoryAccountsTypes repositoryAccountsTypes)
+        public AccountTypeController(IRepositoryAccountsTypes repositoryAccountsTypes, IServiceUser serviceUser)
         {
             this.repositoryAccountsTypes = repositoryAccountsTypes;
+            this.serviceUser = serviceUser;
         }
 
         /// <summary>
-        /// 
+        /// Index.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>IActionResult.</returns>
         public async Task<IActionResult> Index()
         {
-            var userID = 2;
+            var userID = this.serviceUser.GetUserID();
             var accountType = await this.repositoryAccountsTypes.GetByUserID(userID);
             return this.View(accountType);
         }
@@ -57,7 +59,7 @@ namespace BudgetManagement.Controllers
                 return this.View(accountType);
             }
 
-            accountType.UserID = 2;
+            accountType.UserID = this.serviceUser.GetUserID();
 
             var exist = await this.repositoryAccountsTypes.Exists(accountType.Name, accountType.UserID);
             if (exist)
@@ -79,7 +81,7 @@ namespace BudgetManagement.Controllers
         [HttpGet]
         public async Task<IActionResult> ValidateAccountsTypesExist(string name)
         {
-            var usuarioID = 2;
+            var usuarioID = this.serviceUser.GetUserID();
             var accountTypeExist = await this.repositoryAccountsTypes.Exists(name, usuarioID);
             if (accountTypeExist)
             {
