@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <a class="btn btn-warning" asp-action="update" asp-route-id="@accounType.ID">Edit</a>
-                    <a class="btn btn-danger">Delete</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@accounType.ID">Delete</a>
                 </td>
                 <td>
                     @accounType.Name

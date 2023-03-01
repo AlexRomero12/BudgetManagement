@@ -48,5 +48,7 @@ namespace BudgetManagement.Services
         /// <param name="accountType">AccountType.</param>
         /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
         Task Update(AccountType accountType);
+
+        Task Delete(int id);
     }
 }

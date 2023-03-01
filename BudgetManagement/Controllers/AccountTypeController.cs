@@ -111,6 +111,38 @@ namespace BudgetManagement.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userID = this.serviceUser.GetUserID();
+            var accountType = await this.repositoryAccountsTypes.GetByID(id, userID);
+            if (accountType == null)
+            {
+                return this.RedirectToAction("NotFound", "Home");
+            }
+
+            return this.View(accountType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAccountType(int id)
+        {
+            var userID = this.serviceUser.GetUserID();
+            var accountType = this.repositoryAccountsTypes.GetByID(id, userID);
+            if (accountType == null)
+            {
+                return this.RedirectToAction("NotFound", "Home");
+            }
+
+            await this.repositoryAccountsTypes.Delete(id);
+            return this.RedirectToAction("Index");
+        }
+
+        /// <summary>
         /// Validate accounts types exist.
         /// </summary>
         /// <param name="name">Account type name.</param>
