@@ -49,6 +49,18 @@ namespace BudgetManagement.Services
         /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
         Task Update(AccountType accountType);
 
+        /// <summary>
+        /// Delete AccountType.
+        /// </summary>
+        /// <param name="id">AccountType ID.</param>
+        /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
         Task Delete(int id);
+
+        /// <summary>
+        /// Chage order AccountType.
+        /// </summary>
+        /// <param name="accountTypesSorted">AccountType ordeganized.</param>
+        /// <returns><see cref="Task"/> representing the asynchronous operation.</returns>
+        Task Order(IEnumerable<AccountType> accountTypesSorted);
     }
 }

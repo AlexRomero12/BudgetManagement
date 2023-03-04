@@ -111,10 +111,10 @@ namespace BudgetManagement.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Renders the delete AccountType view.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Account type id.</param>
+        /// <returns>IActionResult.</returns>
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -128,6 +128,11 @@ namespace BudgetManagement.Controllers
             return this.View(accountType);
         }
 
+        /// <summary>
+        /// Delete AccountType in DB.
+        /// </summary>
+        /// <param name="id">Account type id.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost]
         public async Task<IActionResult> DeleteAccountType(int id)
         {
@@ -161,13 +166,27 @@ namespace BudgetManagement.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Order account type list.
         /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+        /// <param name="ids">List account type ids.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost]
         public async Task<IActionResult> Order([FromBody] int[] ids)
         {
+            var userId = this.serviceUser.GetUserID();
+            var accountType = await this.repositoryAccountsTypes.GetByUserID(userId);
+            var idsAccounType = accountType.Select(s => s.ID);
+            var idsAccountTypeNotOwnedByUser = ids.Except(idsAccounType).ToList();
+
+            if (idsAccountTypeNotOwnedByUser.Any())
+            {
+                return this.Forbid();
+            }
+
+            var accountTypeOrganized = ids.Select((value, index) => new AccountType() { ID = value, Order = index + 1 }).AsEnumerable();
+
+            await this.repositoryAccountsTypes.Order(accountTypeOrganized);
+
             return this.Ok();
         }
     }

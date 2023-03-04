@@ -53,8 +53,9 @@ namespace BudgetManagement.Services
             using var connection = new SqlConnection(this.connectionString);
             return await connection.QueryAsync<AccountType>(
                 @"SELECT ID,Name,[Order]
-                 FROM ACCOUNTTYPE
-                 WHERE USERID = @USERID", new { userID });
+                FROM ACCOUNTTYPE
+                WHERE USERID = @USERID
+                ORDER BY [Order]", new { userID });
         }
 
         /// <inheritdoc cref="IRepositoryAccountsTypes.Update(AccountType)"/>
@@ -77,10 +78,19 @@ namespace BudgetManagement.Services
                                     WHERE ID = @id AND UserID = @UserId", new { id, UserId });
         }
 
+        /// <inheritdoc cref="IRepositoryAccountsTypes.Delete(int)"/>
         public async Task Delete(int id)
         {
             using var connection = new SqlConnection(this.connectionString);
             await connection.ExecuteAsync(@"DElETE AccountType WHERE ID = @id", new { id });
+        }
+
+        /// <inheritdoc cref="IRepositoryAccountsTypes.Order(IEnumerable{AccountType})"/>
+        public async Task Order(IEnumerable<AccountType> accountTypesSorted)
+        {
+            var query = "UPDATE AccountType set [Order] = @Order where ID = @ID";
+            using var connection = new SqlConnection(this.connectionString);
+            await connection.ExecuteAsync(query, accountTypesSorted);
         }
     }
 }
