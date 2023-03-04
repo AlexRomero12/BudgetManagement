@@ -19,6 +19,7 @@
         {
             <tr>
                 <td>
+                    <input type="hidden" value="@accounType.ID" class="ids" />
                     <a class="btn btn-warning" asp-action="update" asp-route-id="@accounType.ID">Edit</a>
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@accounType.ID">Delete</a>
                 </td>
@@ -31,8 +32,40 @@
 </table>
 @section Scripts{
     <script>
+
+        const urlOrder = '@Url.Action("Order")';
+
         $(function () {
-            $("#reorderable").sortable();
-        })
+            $("#reorderable").sortable({
+                stop: async function (e, ui) {
+                    await updateOrder();
+                }
+            });
+
+            async function updateOrder() {
+                const ids = getElementsIds();
+                await sendIds(ids);
+            }
+
+            function getElementsIds() {
+                const ids = $(".ids").map(function () {
+                    return $(this).val();
+                }).get();
+
+                return ids;
+            }
+
+            async function sendIds(ids) {
+                var data = JSON.stringify(ids);
+
+                await fetch(urlOrder, {
+                    method: 'POST',
+                    body: data,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+            }
+        });
     </script>
 }

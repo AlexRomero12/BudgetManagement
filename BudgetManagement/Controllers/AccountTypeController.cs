@@ -159,5 +159,16 @@ namespace BudgetManagement.Controllers
 
             return this.Json(true);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Order([FromBody] int[] ids)
+        {
+            return this.Ok();
+        }
     }
 }
