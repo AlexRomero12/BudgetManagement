@@ -29,9 +29,13 @@ namespace BudgetManagement.Services
         {
             using var connection = new SqlConnection(this.connectionString);
             var id = await connection.QuerySingleAsync<int>(
-                                                    $@"INSERT INTO AccountType (Name, UserID, [Order]) 
-                                                    VALUES (@Name, @UserID, 0)
-                                                    SELECT SCOPE_IDENTITY();", accountType);
+                                                "Insert_AccountType",
+                                                new
+                                                {
+                                                    UserID = accountType.UserID,
+                                                    Name = accountType.Name,
+                                                },
+                                                commandType: System.Data.CommandType.StoredProcedure);
             accountType.ID = id;
         }
 
