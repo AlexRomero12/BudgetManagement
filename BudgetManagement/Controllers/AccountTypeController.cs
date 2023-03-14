@@ -20,6 +20,7 @@ namespace BudgetManagement.Controllers
         /// Initializes a new instance of the <see cref="AccountTypeController"/> class.
         /// </summary>
         /// <param name="repositoryAccountsTypes">Irepository accounts types.</param>
+        /// <param name="serviceUser">IService User.</param>
         public AccountTypeController(IRepositoryAccountsTypes repositoryAccountsTypes, IServiceUser serviceUser)
         {
             this.repositoryAccountsTypes = repositoryAccountsTypes;
